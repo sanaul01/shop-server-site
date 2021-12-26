@@ -19,13 +19,17 @@ async function run() {
       const database = client.db("shop_zone");
       const productsCollection = database.collection("products");
       const usersCollection = database.collection("users");
-       
+
+
+      // Get products from mongodb 
+
       app.get('/products', async (req, res)=>{
           const cursor = productsCollection.find({});
           const products = await cursor.toArray();
           res.json(products)
       })
 
+      // Get a single product from mongodb 
       app.get('/products/:id', async (req, res)=>{
         const id = req.params.id;
             const query = {_id: ObjectId(id)};
@@ -33,18 +37,21 @@ async function run() {
             res.json(product);
       })
 
+      // Post product from client site to mongodb 
       app.post('/products', async (req, res)=>{
           const product = req.body
           const result = await productsCollection.insertOne(product);
           res.json(result)
       })
 
+      // Get user from mongodb 
       app.get('/users', async (req, res)=>{
         const cursor = usersCollection.find({});
         const users = await cursor.toArray();
         res.json(users)
     })
 
+      // Keep user to mongodb 
       app.post('/users', async (req, res)=>{
           const user = req.body
           const result = await usersCollection.insertOne(user);
