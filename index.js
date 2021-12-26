@@ -17,6 +17,7 @@ async function run() {
       await client.connect();
       const database = client.db("shop_zone");
       const productsCollection = database.collection("products");
+      const usersCollection = database.collection("users");
        
       app.get('/products', async (req, res)=>{
           const cursor = productsCollection.find({});
@@ -27,6 +28,18 @@ async function run() {
       app.post('/products', async (req, res)=>{
           const product = req.body
           const result = await productsCollection.insertOne(product);
+          res.json(result)
+      })
+
+      app.get('/users', async (req, res)=>{
+        const cursor = usersCollection.find({});
+        const users = await cursor.toArray();
+        res.json(users)
+    })
+
+      app.post('/users', async (req, res)=>{
+          const user = req.body
+          const result = await usersCollection.insertOne(user);
           res.json(result)
       })
 
